@@ -53,20 +53,20 @@ class Game:
          frame=cvzone.overlayPNG(frame,currentobj,position)
          cv2.putText(frame,text=f"Score: {self.score}",org=self.score_pos,fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=1,
-         color=(255, 0, 0), 
-         thickness=1,
+         color=(0, 0, 0), 
+         thickness=2,
          lineType=cv2.LINE_AA
          )
          cv2.putText(frame,text="Press K to Leave",org=(50,100),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=1,
-          color=(255, 0, 0), 
-         thickness=1,
+          color=(0, 0, 0), 
+         thickness=2,
          lineType=cv2.LINE_AA
          )
          cv2.putText(frame,text="Press c to switch",org=(50,150),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=1,
-          color=(255, 0, 0), 
-         thickness=1,
+          color=(0, 0, 0), 
+         thickness=2,
          lineType=cv2.LINE_AA
          )
    

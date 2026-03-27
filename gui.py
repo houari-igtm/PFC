@@ -1,6 +1,6 @@
 from tkinter import Tk
 from tkinter import *
-from game import Game
+from game1.game import Game
 
 
 class Gui:

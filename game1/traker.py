@@ -87,7 +87,7 @@ class Tracker:
                         center[1] >= position[1] and
                         center[1] <= position[1] + obj_h):
                  
-                if Mouth_Open>80:
+                if Mouth_Open>82:
                  if currentobj["is_eatable"] :
                         self.score=self.score+1
                         position[1]=self.hight+1
