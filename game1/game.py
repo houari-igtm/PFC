@@ -8,8 +8,8 @@ class Game:
     
     def __init__(self):
       
-      self.width=1250
-      self.hight=700
+      self.width=1280
+      self.hight=720
       self.speed=5
       self.score=0
       self.score_pos=[50,50]
@@ -50,28 +50,40 @@ class Game:
         return allfood[ra.randint(0,len(allfood)-1)],[ra.randint(half-120,half+120),2] 
         
     def AddToFrame(self,frame,currentobj,position):
-         frame=cvzone.overlayPNG(frame,currentobj,position)
-         cv2.putText(frame,text=f"Score: {self.score}",org=self.score_pos,fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-         fontScale=1,
-         color=(0, 0, 0), 
-         thickness=2,
-         lineType=cv2.LINE_AA
-         )
-         cv2.putText(frame,text="Press K to Leave",org=(50,100),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-         fontScale=1,
-          color=(0, 0, 0), 
-         thickness=2,
-         lineType=cv2.LINE_AA
-         )
-         cv2.putText(frame,text="Press c to switch",org=(50,150),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-         fontScale=1,
-          color=(0, 0, 0), 
-         thickness=2,
-         lineType=cv2.LINE_AA
-         )
-   
-   
+         frame = cvzone.overlayPNG(frame, currentobj, position)
+         h, w, _ = frame.shape
+         bar_height = int(self.hight*0.15)
+         cv2.rectangle(frame, (0, 0), (w, bar_height), (0, 0, 0), -1)
+         font = cv2.FONT_HERSHEY_SIMPLEX
+         
+         y_text = int(bar_height *0.60)  # vertical alignment inside bar
+
         
+         cv2.putText(frame, text=f"Score: {self.score}",
+                    org=(int(w/2)-100, y_text),
+                    fontFace=font,
+                    fontScale=1.4,
+                    color=(255, 255, 255),
+                    thickness=3,
+                    lineType=cv2.LINE_AA)
+
+      
+         cv2.putText(frame, text="Press K to Leave",
+                    org=(w-260, y_text),
+                    fontFace=font,
+                    fontScale=0.8,
+                    color=(255, 255, 255),
+                    thickness=2,
+                    lineType=cv2.LINE_AA)
+
+         cv2.putText(frame, text="Press C to Switch",
+                    org=(20, y_text),
+                    fontFace=font,
+                    fontScale=0.8,
+                    color=(255, 255, 255),
+                    thickness=2,
+                    lineType=cv2.LINE_AA)
+            
 
     def Run(self):
         currentobj,position=self.ChoiseObject()
@@ -79,6 +91,7 @@ class Game:
         while True:
          
          ret ,frame=self.vid.read()
+         print(frame.shape)
          self.AddToFrame(frame,currentobj["img"],position)
          frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
        

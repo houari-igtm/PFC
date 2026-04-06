@@ -30,7 +30,7 @@ class Tracker:
                
                 if id==9:
                    px ,py=int(point.x*self.width),int(point.y*self.hight)
-                   cv2.circle(frame,(px,py),5,(255,0,255),cv2.FILLED)
+                   cv2.circle(frame,(px,py),8,(255,255,255),cv2.FILLED)
                    pos=[px,py]
                    for i,obj in enumerate(currentobj):
                     obj_h, obj_w, _ = obj["img"].shape

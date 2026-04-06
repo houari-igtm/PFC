@@ -9,8 +9,8 @@ class Game:
     
     def __init__(self):
       
-      self.width=1250
-      self.hight=700
+      self.width=1280
+      self.hight=720
       self.speed=5
       self.score=0
       self.middle_width=int(self.width/2)
