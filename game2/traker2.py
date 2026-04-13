@@ -13,8 +13,6 @@ class Tracker:
         self.mpHand=mp.solutions.hands
         self.hands=self.mpHand.Hands()
         self.mpDraw=mp.solutions.drawing_utils
-        self.width=0
-        self.hight=0
         self.score=0
         self.width=width
         self.hight=hight

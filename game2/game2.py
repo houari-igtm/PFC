@@ -2,7 +2,7 @@ import os
 import random as ra
 import cv2
 import cvzone
-from traker2 import Tracker
+from .traker2 import Tracker
 import time
 
 class Game:
@@ -67,20 +67,33 @@ class Game:
         
     def AddToFrame(self,frame,currentobj,position,Name):
          
-         frame=cvzone.overlayPNG(frame,currentobj,position)
-         cv2.putText(frame,text=f"Score: {self.score}",org=self.score_pos,fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-         fontScale=1,
-         color=(0, 0, 0), 
-         thickness=2,
-         lineType=cv2.LINE_AA
-         )
-         cv2.putText(frame,text="Press K to Leave",org=(50,100),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-         fontScale=1,
-          color=(0, 0, 0), 
-         thickness=2,
-         lineType=cv2.LINE_AA
-         )
-       
+         frame = cvzone.overlayPNG(frame, currentobj, position)
+         h, w, _ = frame.shape
+         bar_height = int(self.hight*0.15)
+         cv2.rectangle(frame, (0, 0), (w, bar_height), (0, 0, 0), -1)
+         font = cv2.FONT_HERSHEY_SIMPLEX
+         
+         y_text = int(bar_height *0.60) 
+
+        
+         cv2.putText(frame, text=f"Score: {self.score}",
+                    org=(int(w/2)-100, y_text),
+                    fontFace=font,
+                    fontScale=1.4,
+                    color=(255, 255, 255),
+                    thickness=3,
+                    lineType=cv2.LINE_AA)
+
+      
+         cv2.putText(frame, text="Press K to Leave",
+                    org=(w-260, y_text),
+                    fontFace=font,
+                    fontScale=0.8,
+                    color=(255, 255, 255),
+                    thickness=2,
+                    lineType=cv2.LINE_AA)
+
+         
          
          cv2.putText(frame,text=f"Click : {Name}",org=(self.middle_width-150,self.middle_height-180),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=2,
@@ -115,7 +128,7 @@ class Game:
                   self.wait_st = time.time()
 
          if self.waiting:
-                  cv2.putText(frame,f"{result} - WAIT...",(500, 100),cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+                  cv2.putText(frame,f"{result} - WAIT...",(500, self.hight-100),cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
                   if time.time() - self.wait_st > 2:
                       currentobj, positions, Name = self.ChoiseObject()
                       self.waiting = False

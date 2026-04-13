@@ -2,7 +2,7 @@ import os
 import random as ra
 import cv2
 import cvzone
-from traker import Tracker
+from .traker import Tracker
 
 class Game:
     
@@ -14,7 +14,7 @@ class Game:
       self.score=0
       self.score_pos=[50,50]
       self.vid=cv2.VideoCapture(0)
-      self.track= Tracker(self.width,self.hight)
+      self.track= Tracker(self.width,self.hight)   
       self.vid.set(3,self.width)
       self.vid.set(4,self.hight)
       self.type="face"
@@ -56,7 +56,7 @@ class Game:
          cv2.rectangle(frame, (0, 0), (w, bar_height), (0, 0, 0), -1)
          font = cv2.FONT_HERSHEY_SIMPLEX
          
-         y_text = int(bar_height *0.60)  # vertical alignment inside bar
+         y_text = int(bar_height *0.60) 
 
         
          cv2.putText(frame, text=f"Score: {self.score}",
@@ -91,7 +91,7 @@ class Game:
         while True:
          
          ret ,frame=self.vid.read()
-         print(frame.shape)
+         
          self.AddToFrame(frame,currentobj["img"],position)
          frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
        
@@ -99,7 +99,7 @@ class Game:
          if self.type=="hand":
               self.score=self.track.TrackHands(currentobj,position,frame,frame_RBG)
          elif self.type=="face":
-            self.score=self.track.TrackFace(currentobj,position,frame,frame_RBG)
+              self.score=self.track.TrackFace(currentobj,position,frame,frame_RBG)
      
          cv2.imshow("frame",frame)
         

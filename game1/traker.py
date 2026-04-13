@@ -13,37 +13,58 @@ class Tracker:
         self.mpHand=mp.solutions.hands
         self.hands=self.mpHand.Hands()
         self.mpDraw=mp.solutions.drawing_utils
-        self.width=0
-        self.hight=0
         self.score=0
         self.width=width
         self.hight=hight
 
     def TrackHands(self,currentobj,position,frame,frame_RBG):
-          result=self.hands.process(frame_RBG)
-          if result.multi_hand_landmarks:
+          
+        result = self.hands.process(frame_RBG)
+
+        if result.multi_hand_landmarks:
             for hand in result.multi_hand_landmarks:
-              for id ,point in enumerate(hand.landmark):
-               
-                if id==9:
-                   px ,py=int(point.x*self.width),int(point.y*self.hight)
-                   cv2.circle(frame,(px,py),5,(255,0,255),cv2.FILLED)
-                   pos=[px,py]
-                   obj_h, obj_w, _ = currentobj["img"].shape
-                   if (pos[0] >= position[0] and
-                        pos[0] <= position[0] + obj_w and
-                        pos[1] >= position[1] and
-                        pos[1] <= position[1] + obj_h):
-                       if currentobj["is_eatable"]:
-                        self.score=self.score+1
-                       else:
-                          self.score=0
-                       position[1]=self.hight+1
-            
-            self.mpDraw.draw_landmarks(frame,hand,self.mpHand.HAND_CONNECTIONS)
-          return self.score
 
+                h, w, _ = frame.shape
+                lm = hand.landmark
 
+                # 4 purple points on palm
+                palm_ids = [0, 5, 9, 13]
+                palm_points = []
+
+                for pid in palm_ids:
+                    px, py = int(lm[pid].x * w), int(lm[pid].y * h)
+                    palm_points.append([px, py])
+                    cv2.circle(frame, (px, py), 8, (255, 0, 255), cv2.FILLED)
+
+                # Detect open hand
+                palm_center = palm_points[2]
+                finger_tip = lm[12]  # middle finger tip
+
+                fx, fy = int(finger_tip.x * w), int(finger_tip.y * h)
+                cv2.circle(frame, (fx, fy), 8, (0, 255, 0), cv2.FILLED)
+
+                distance = ((fx - palm_center[0])**2 + (fy - palm_center[1])**2) ** 0.5
+                hand_open = distance > 40
+
+                obj_h, obj_w, _ = currentobj["img"].shape
+
+                if hand_open:
+                    for pos in palm_points:
+                        if (pos[0] >= position[0] and
+                            pos[0] <= position[0] + obj_w and
+                            pos[1] >= position[1] and
+                            pos[1] <= position[1] + obj_h):
+
+                            if currentobj["is_eatable"]:
+                                self.score += 1
+                            else:
+                                self.score = 0
+
+                            position[1] = self.hight + 1
+
+                self.mpDraw.draw_landmarks(frame, hand, self.mpHand.HAND_CONNECTIONS)
+
+        return self.score
 
     def TrackFace(self,currentobj,position,frame,frame_RBG):
           result=self.face.process(frame_RBG)
