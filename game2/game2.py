@@ -2,17 +2,14 @@ import os
 import random as ra
 import cv2
 import cvzone
-from .traker2 import Tracker
+from game2.traker2 import Tracker
 import time
+from base.base_games import Base
 
-class Game:
+class Game(Base):
     
     def __init__(self):
-      
-      self.width=1280
-      self.hight=720
-      self.speed=5
-      self.score=0
+      super().__init__()
       self.middle_width=int(self.width/2)
       self.middle_height=int(self.hight/2)
       self.score_pos=[50,50]
@@ -128,7 +125,11 @@ class Game:
                   self.wait_st = time.time()
 
          if self.waiting:
-                  cv2.putText(frame,f"{result} - WAIT...",(500, self.hight-100),cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+                  if result=="correct":
+                      color=(0,255,0)
+                  else:
+                      color=(0,0,255)
+                  cv2.putText(frame,f"{result} - WAIT...",(500, self.hight-100),cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
                   if time.time() - self.wait_st > 2:
                       currentobj, positions, Name = self.ChoiseObject()
                       self.waiting = False

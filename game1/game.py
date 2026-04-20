@@ -2,16 +2,13 @@ import os
 import random as ra
 import cv2
 import cvzone
-from .traker import Tracker
+from game1.traker import Tracker
+from base.base_games import Base
 
-class Game:
+class Game(Base):
     
     def __init__(self):
-      
-      self.width=1280
-      self.hight=720
-      self.speed=5
-      self.score=0
+      super().__init__()
       self.score_pos=[50,50]
       self.vid=cv2.VideoCapture(0)
       self.track= Tracker(self.width,self.hight)   

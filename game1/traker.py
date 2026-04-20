@@ -1,21 +1,14 @@
 import cv2
 import mediapipe as mp
+from base.base_tracker import Base_Tracker
 
-
-class Tracker:
+class Tracker(Base_Tracker):
  
     
     def __init__(self,width,hight):
+        super().__init__(width,hight)
         self. mpface=mp.solutions.face_mesh
         self.face=self.mpface.FaceMesh()
-        self.mpDraw=mp.solutions.drawing_utils
-        self.drawSpec=self.mpDraw.DrawingSpec(thickness=1, circle_radius=1)
-        self.mpHand=mp.solutions.hands
-        self.hands=self.mpHand.Hands()
-        self.mpDraw=mp.solutions.drawing_utils
-        self.score=0
-        self.width=width
-        self.hight=hight
 
     def TrackHands(self,currentobj,position,frame,frame_RBG):
           
