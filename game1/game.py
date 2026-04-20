@@ -44,20 +44,23 @@ class Game(Base):
         allfood=[]
         allfood=self.Load_eatable()+self.Load_NoNEatable()
         half=self.width/2
-        return allfood[ra.randint(0,len(allfood)-1)],[ra.randint(half-120,half+120),2] 
+        # Use proportional offset (20% of width) instead of hardcoded 120
+        offset = int(self.width * 0.1)
+        return allfood[ra.randint(0,len(allfood)-1)],[ra.randint(int(half-offset),int(half+offset)),2] 
         
     def AddToFrame(self,frame,currentobj,position):
          frame = cvzone.overlayPNG(frame, currentobj, position)
          h, w, _ = frame.shape
-         bar_height = int(self.hight*0.15)
+         bar_height = int(h*0.15)
          cv2.rectangle(frame, (0, 0), (w, bar_height), (0, 0, 0), -1)
          font = cv2.FONT_HERSHEY_SIMPLEX
          
-         y_text = int(bar_height *0.60) 
-
+         y_text = int(bar_height *0.60)
+         score_offset = int(w * 0.08)  # 8% of width
+         button_offset = int(w * 0.2)  # 20% of width
         
          cv2.putText(frame, text=f"Score: {self.score}",
-                    org=(int(w/2)-100, y_text),
+                    org=(int(w/2)-score_offset, y_text),
                     fontFace=font,
                     fontScale=1.4,
                     color=(255, 255, 255),
@@ -66,7 +69,7 @@ class Game(Base):
 
       
          cv2.putText(frame, text="Press K to Leave",
-                    org=(w-260, y_text),
+                    org=(w-button_offset, y_text),
                     fontFace=font,
                     fontScale=0.8,
                     color=(255, 255, 255),
@@ -74,7 +77,7 @@ class Game(Base):
                     lineType=cv2.LINE_AA)
 
          cv2.putText(frame, text="Press C to Switch",
-                    org=(20, y_text),
+                    org=(int(w*0.02), y_text),
                     fontFace=font,
                     fontScale=0.8,
                     color=(255, 255, 255),

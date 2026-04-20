@@ -49,32 +49,35 @@ class Game(Base):
     def ChoiseObject(self): 
         allfood=[]
         positions=[]
-        offset=0
         allfood=self.Load_eatable()+self.Load_NoNEatable()
         ra.shuffle(allfood)
         selected_obj=allfood[0:3]
         Name=ra.choice(selected_obj)["name"]
+        # Use proportional spacing (10% of width between objects)
+        spacing = int(self.width * 0.10)
+        object_width = int(self.width * 0.15)  # Approximate object width 15% of screen
+        total_width = object_width * 3 + spacing * 2
+        start_x = int((self.width - total_width) / 2)
         for i in range(3):
-          x = self.middle_width - 250 +offset
-          y = self.middle_height
+          x = start_x + i * (object_width + spacing)
+          y = int(self.hight * 0.4)  # 40% down the screen
           positions.append([x, y])
-          offset+=250
         return allfood[0:3], positions, Name
           
         
     def AddToFrame(self,frame,currentobj,position,Name):
-         
          frame = cvzone.overlayPNG(frame, currentobj, position)
          h, w, _ = frame.shape
-         bar_height = int(self.hight*0.15)
+         bar_height = int(h*0.15)
          cv2.rectangle(frame, (0, 0), (w, bar_height), (0, 0, 0), -1)
          font = cv2.FONT_HERSHEY_SIMPLEX
          
-         y_text = int(bar_height *0.60) 
-
+         y_text = int(bar_height *0.60)
+         score_offset = int(w * 0.08)
+         button_offset = int(w * 0.2)
         
          cv2.putText(frame, text=f"Score: {self.score}",
-                    org=(int(w/2)-100, y_text),
+                    org=(int(w/2)-score_offset, y_text),
                     fontFace=font,
                     fontScale=1.4,
                     color=(255, 255, 255),
@@ -83,16 +86,17 @@ class Game(Base):
 
       
          cv2.putText(frame, text="Press K to Leave",
-                    org=(w-260, y_text),
+                    org=(w-button_offset, y_text),
                     fontFace=font,
                     fontScale=0.8,
                     color=(255, 255, 255),
                     thickness=2,
                     lineType=cv2.LINE_AA)
-
          
-         
-         cv2.putText(frame,text=f"Click : {Name}",org=(self.middle_width-150,self.middle_height-180),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+         # Responsive instruction text position
+         instr_y = int(h * 0.25)
+         instr_x = int(w * 0.25)
+         cv2.putText(frame,text=f"Click : {Name}",org=(instr_x,instr_y),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=2,
           color=(0, 0, 0), 
          thickness=2,
