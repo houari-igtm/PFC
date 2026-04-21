@@ -59,57 +59,63 @@ class Tracker(Base_Tracker):
 
         return self.score
 
-    def TrackFace(self,currentobj,position,frame,frame_RBG):
-          result=self.face.process(frame_RBG)
-          if result.multi_face_landmarks:
-            for face in result.multi_face_landmarks:   
-             self.mpDraw.draw_landmarks(
-              frame,
-              face,
-              self.mpface.FACEMESH_LIPS,
-              self.drawSpec,
-              self.drawSpec
-          )           
-            top = face.landmark[0]
-            bottom = face.landmark[17]
-            left = face.landmark[61]
-            right = face.landmark[291]
+    def TrackFace(self, currentobj, position, frame, frame_RBG):
+        result = self.face.process(frame_RBG)
+        if not result.multi_face_landmarks:
+            return self.score, False
 
-          
+        for face in result.multi_face_landmarks:
+            self.mpDraw.draw_landmarks(
+                frame,
+                face,
+                self.mpface.FACEMESH_LIPS,
+                self.drawSpec,
+                self.drawSpec
+            )
+
             h, w, _ = frame.shape
+            lm = face.landmark
 
-            top_pt = [int(top.x * w), int(top.y * h)]
-            bottom_pt = [int(bottom.x * w), int(bottom.y * h)]
-            left_pt = [int(left.x * w), int(left.y * h)]
-            right_pt = [int(right.x * w), int(right.y * h)]
+            TOP_LIP    = [13, 312, 311, 310, 415, 308]
+            BOTTOM_LIP = [14, 317, 402, 318, 324, 308]
 
-           
-            center_x = int((left_pt[0] + right_pt[0]) / 2)
-            center_y = int((top_pt[1] + bottom_pt[1]) / 2)
+            def avg_y(ids):
+                return sum(lm[i].y for i in ids) / len(ids)
 
-            center = [center_x, center_y]
-            Mouth_Open=bottom_pt[1]-top_pt[1]
-         
-            cv2.circle(frame, top_pt, 4, (255,0,0), cv2.FILLED)
-            cv2.circle(frame, bottom_pt, 4, (255,0,0), cv2.FILLED)
-            cv2.circle(frame, left_pt, 4, (255,0,0), cv2.FILLED)
-            cv2.circle(frame, right_pt, 4, (255,0,0), cv2.FILLED)
-            cv2.circle(frame, center, 8, (0,0,255), cv2.FILLED)
+            top_y    = avg_y(TOP_LIP)    * h
+            bottom_y = avg_y(BOTTOM_LIP) * h
+
+            left_x  = lm[61].x * w
+            right_x = lm[291].x * w
+            mouth_width = abs(right_x - left_x)
+
+            center_x = int((left_x + right_x) / 2)
+            center_y = int((top_y + bottom_y) / 2)
+            center   = [center_x, center_y]
+
+            mouth_gap   = bottom_y - top_y
+            mouth_ratio = mouth_gap / mouth_width if mouth_width > 0 else 0
+            mouth_open  = mouth_ratio > 0.20
+
+            for pt in [(center_x, int(top_y)), (center_x, int(bottom_y)),
+                    (int(left_x), center_y), (int(right_x), center_y)]:
+                cv2.circle(frame, pt, 4, (255, 0, 0), cv2.FILLED)
+            cv2.circle(frame, center, 8, (0, 0, 255), cv2.FILLED)
+
+            cv2.putText(frame, f"ratio:{mouth_ratio:.2f} ({'OPEN' if mouth_open else 'closed'})",
+                        (center_x - 40, center_y - 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                        (0, 255, 0) if mouth_open else (0, 100, 255), 1, cv2.LINE_AA)
+
             obj_h, obj_w, _ = currentobj["img"].shape
-            if (center[0] >= position[0] and
-                        center[0] <= position[0] + obj_w and
-                        center[1] >= position[1] and
-                        center[1] <= position[1] + obj_h):
-                 
-                if Mouth_Open>82:
-                 if currentobj["is_eatable"] :
-                        self.score=self.score+1
-                        position[1]=self.hight+1
-               
-                 elif currentobj["is_eatable"]==False:
-                          self.score=0
-                          position[1]=self.hight+1
-                
-               
-           
-            return self.score
+            in_box = (position[0] <= center[0] <= position[0] + obj_w and
+                    position[1] <= center[1] <= position[1] + obj_h)
+
+            if in_box and mouth_open:
+                if currentobj["is_eatable"]:
+                    self.score += 1
+                else:
+                    self.score = 0
+                return self.score, True
+
+        return self.score, False

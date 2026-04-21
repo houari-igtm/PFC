@@ -98,9 +98,10 @@ class Game(Base):
 
          if self.type=="hand":
               self.score=self.track.TrackHands(currentobj,position,frame,frame_RBG)
-         elif self.type=="face":
-              self.score=self.track.TrackFace(currentobj,position,frame,frame_RBG)
-     
+         elif self.type == "face":
+            self.score, eaten = self.track.TrackFace(currentobj, position, frame, frame_RBG)
+            if eaten or position[1] > self.hight:   # ← two separate clean conditions
+                currentobj, position = self.ChoiseObject()
          cv2.imshow("frame",frame)
         
          position[1]+=self.speed
