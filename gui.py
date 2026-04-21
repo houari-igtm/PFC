@@ -26,7 +26,7 @@ class Gui:
     def create_header(self):
         """إنشاء رأس الصفحة المطور"""
         title_frame = Frame(self.main_frame, bg="#2C3E50")
-        title_frame.pack(fill=X, pady=(0, 40))
+        title_frame.pack(fill=X, pady=(0, 25))
 
         # العنوان الرئيسي
         Label(
@@ -49,22 +49,18 @@ class Gui:
             fg="#ECF0F1",
             bg="#2C3E50"
         ).pack()
-
-    def create_game_modes(self):
-        """إنشاء منطقة اختيار أوضاع اللعب بشكل مركزي"""
-        modes_frame = Frame(self.main_frame, bg="#2C3E50")
-        modes_frame.pack(expand=True)
-
+        # Choose your game label
         Label(
-            modes_frame,
+            title_frame,
             text="Choose your game",
             font=("Tahoma", 16, "bold"),
             fg="#3498DB",
             bg="#2C3E50"
-        ).pack(pady=(0, 30))
+        ).pack(pady=(15, 10))
 
-        buttons_container = Frame(modes_frame, bg="#2C3E50")
-        buttons_container.pack()
+        # Buttons container
+        buttons_container = Frame(title_frame, bg="#2C3E50")
+        buttons_container.pack(pady=(80, 0))
 
         # إعدادات الأزرار المشتركة
         btn_style = {
@@ -92,12 +88,41 @@ class Gui:
         self.hand_btn = Button(
             buttons_container,
             text="🎮 Game 2",
-            bg="#C0392B",
-            activebackground="#E74C3C",
+            bg="#E74C3C",
+            activebackground="#E55545",
             command=self.start_game2,
             **btn_style
         )
         self.hand_btn.pack(side=LEFT, padx=15)
+
+        # Quit button container (below Game buttons, centered)
+        quit_container = Frame(title_frame, bg="#2C3E50")
+        quit_container.pack(pady=(10, 0))
+
+        # زر الخروج
+        quit_btn_style = {
+            "font": ("Tahoma", 14, "bold"),
+            "width": 18,
+            "height": 2,
+            "fg": "white",
+            "relief": FLAT,
+            "cursor": "hand2",
+            "bd": 0
+        }
+        self.quit_btn = Button(
+            quit_container,
+            text="❌ Quit",
+            bg="#C0392B",
+            activebackground="#B83D30",
+            command=self.app.quit,
+            **quit_btn_style
+        )
+        self.quit_btn.pack(pady=40)
+
+    def create_game_modes(self):
+        """إنشاء منطقة اختيار أوضاع اللعب بشكل مركزي"""
+        modes_frame = Frame(self.main_frame, bg="#2C3E50")
+        modes_frame.pack(expand=True)
 
     def create_footer(self):
         """تذييل الصفحة"""
