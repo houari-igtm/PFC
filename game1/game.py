@@ -15,6 +15,7 @@ class Game(Base):
       self.vid.set(3,self.width)
       self.vid.set(4,self.hight)
       self.type="face"
+      self.lost=False
       
   
     def Load_eatable(self):
@@ -89,25 +90,34 @@ class Game(Base):
         currentobj,position=self.ChoiseObject()
 
         while True:
-         
          ret ,frame=self.vid.read()
          
-         self.AddToFrame(frame,currentobj["img"],position)
-         frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-       
-
-         if self.type=="hand":
-              self.score=self.track.TrackHands(currentobj,position,frame,frame_RBG)
-         elif self.type == "face":
-            self.score, eaten = self.track.TrackFace(currentobj, position, frame, frame_RBG)
-            if eaten or position[1] > self.hight:   # ← two separate clean conditions
-                currentobj, position = self.ChoiseObject()
-         cv2.imshow("frame",frame)
+         if self.lost==False:
+          self.AddToFrame(frame,currentobj["img"],position)
+          frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
         
-         position[1]+=self.speed
-         if position[1]>self.hight:
-           currentobj,position=self.ChoiseObject()
-           
+
+          if self.type=="hand":
+                self.score,self.lost=self.track.TrackHands(currentobj,position,frame,frame_RBG)
+          elif self.type == "face":
+              self.score, self.lost = self.track.TrackFace(currentobj, position, frame, frame_RBG)
+              if  position[1] > self.hight:   
+                  currentobj, position = self.ChoiseObject()
+
+          cv2.imshow("frame",frame)
+          
+          position[1]+=self.speed
+          if position[1]>self.hight:
+            currentobj,position=self.ChoiseObject()
+         else:
+             
+             
+             x = 365
+             y = self.hight - 100
+             cv2.putText(frame, "Game Over Press R to Restart", (x, y), cv2.FONT_HERSHEY_SIMPLEX,2, (0, 0, 255), 3)
+             cv2.imshow("frame", frame)
+             
+         
          key = cv2.waitKey(1)
 
          if key == ord("c"):
@@ -115,7 +125,10 @@ class Game(Base):
                   self.type = "face"
               else:
                   self.type = "hand"
-
+         if key == ord("r") and self.lost:
+              self.lost = False
+              self.score = 0
+              currentobj, position = self.ChoiseObject()
          if key == ord("k"):
               self.vid.release() 
               cv2.destroyAllWindows()
