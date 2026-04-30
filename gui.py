@@ -6,17 +6,17 @@ class Gui:
     def __init__(self):
         self.app = Tk()
         
-        # إعدادات النافذة الرئيسية
+        
         self.app.title("🎮 Camera Eating Game")
-        self.app.geometry("1280x720") # تم تقليل الارتفاع ليتناسب مع غياب المعاينة
+        self.app.geometry("1280x720") 
         self.app.configure(bg="#2C3E50")
         self.app.resizable(False, False)
 
-        # الإطار الرئيسي
+        
         self.main_frame = Frame(self.app, bg="#2C3E50")
         self.main_frame.pack(expand=True, fill=BOTH, padx=50, pady=50)
 
-        # إنشاء المكونات
+       
         self.create_header()
         self.create_game_modes()
         self.create_footer()
@@ -24,11 +24,11 @@ class Gui:
         self.app.mainloop()
 
     def create_header(self):
-        """إنشاء رأس الصفحة المطور"""
+        
         title_frame = Frame(self.main_frame, bg="#2C3E50")
         title_frame.pack(fill=X, pady=(0, 25))
 
-        # العنوان الرئيسي
+        
         Label(
             title_frame,
             text="🎮 CAMERA EATING GAME",
@@ -37,19 +37,19 @@ class Gui:
             bg="#2C3E50"
         ).pack()
 
-        # خط فاصل أنيق
+      
         separator = Frame(title_frame, height=2, bg="#34495E")
         separator.pack(fill=X, pady=15)
 
-        # وصف اللعبة
+      
         Label(
             title_frame,
-            text="تحدَّ نفسك! استخدم حركات وجهك أو يدك للعب",
+            text="Challenge yourself! Use your facial or hand movements to play",
             font=("Tahoma", 14),
             fg="#ECF0F1",
             bg="#2C3E50"
         ).pack()
-        # Choose your game label
+      
         Label(
             title_frame,
             text="Choose your game",
@@ -58,11 +58,10 @@ class Gui:
             bg="#2C3E50"
         ).pack(pady=(15, 10))
 
-        # Buttons container
+       
         buttons_container = Frame(title_frame, bg="#2C3E50")
         buttons_container.pack(pady=(80, 0))
 
-        # إعدادات الأزرار المشتركة
         btn_style = {
             "font": ("Tahoma", 14, "bold"),
             "width": 18,
@@ -73,7 +72,7 @@ class Gui:
             "bd": 0
         }
 
-        # زر وضع الوجه
+       
         self.face_btn = Button(
             buttons_container,
             text="🎮 Game 1",
@@ -84,7 +83,7 @@ class Gui:
         )
         self.face_btn.pack(side=LEFT, padx=15)
 
-        # زر وضع اليد
+      
         self.hand_btn = Button(
             buttons_container,
             text="🎮 Game 2",
@@ -99,7 +98,7 @@ class Gui:
         quit_container = Frame(title_frame, bg="#2C3E50")
         quit_container.pack(pady=(10, 0))
 
-        # زر الخروج
+       
         quit_btn_style = {
             "font": ("Tahoma", 14, "bold"),
             "width": 18,
@@ -120,18 +119,18 @@ class Gui:
         self.quit_btn.pack(pady=40)
 
     def create_game_modes(self):
-        """إنشاء منطقة اختيار أوضاع اللعب بشكل مركزي"""
+      
         modes_frame = Frame(self.main_frame, bg="#2C3E50")
         modes_frame.pack(expand=True)
 
     def create_footer(self):
-        """تذييل الصفحة"""
+        
         footer = Frame(self.app, bg="#34495E", height=60)
         footer.pack(side=BOTTOM, fill=X)
 
         Label(
             footer,
-            text="💡 تعليمات: تأكد من وجود إضاءة جيدة أمام الكاميرا عند بدء اللعب",
+            text="💡 Instructions: Make sure there is good lighting in front of the camera when you start playing.",
             font=("Tahoma", 10),
             fg="#BDC3C7",
             bg="#34495E"

@@ -113,6 +113,7 @@ class Game(Base):
         while True:
          
          ret ,frame=self.vid.read()
+         frame = cv2.flip(frame, 1)
          for i, obj in enumerate(currentobj):
                 self.AddToFrame(frame,obj["img"],positions[i],Name)   
        

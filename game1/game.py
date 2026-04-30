@@ -91,7 +91,7 @@ class Game(Base):
 
         while True:
          ret ,frame=self.vid.read()
-         
+         frame = cv2.flip(frame, 1)
          if self.lost==False:
           self.AddToFrame(frame,currentobj["img"],position)
           frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
