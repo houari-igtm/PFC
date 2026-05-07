@@ -12,11 +12,18 @@ class Tracker(Base_Tracker):
         self.status=None
         self.result=None
 
+    def is_hand_closed(self, hand):
+    
+        tip_y = hand.landmark[12].y
+        base_y = hand.landmark[9].y
+        return tip_y > base_y
+
     def TrackHands(self,currentobj,positions,frame,frame_RBG ,Name):
           self.status = ""
           result=self.hands.process(frame_RBG)
           if result.multi_hand_landmarks:
             for hand in result.multi_hand_landmarks:
+              hand_closed = self.is_hand_closed(hand)
               for id ,point in enumerate(hand.landmark):
                
                 if id==9:
@@ -28,7 +35,7 @@ class Tracker(Base_Tracker):
                     if (pos[0] >= positions[i][0] and
                             pos[0] <= positions[i][0] + obj_w and
                             pos[1] >= positions[i][1] and
-                            pos[1] <= positions[i][1] + obj_h):
+                            pos[1] <= positions[i][1] + obj_h) and hand_closed:
                         if obj["name"]==Name :
                             self.score=self.score+1
                             self.status="change"
