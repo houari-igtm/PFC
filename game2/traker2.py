@@ -12,11 +12,7 @@ class Tracker(Base_Tracker):
         self.status=None
         self.result=None
 
-    def is_hand_closed(self, hand):
-    
-        tip_y = hand.landmark[12].y
-        base_y = hand.landmark[9].y
-        return tip_y > base_y
+  
 
     def TrackHands(self,currentobj,positions,frame,frame_RBG ,Name):
           self.status = ""

@@ -11,3 +11,8 @@ class Base_Tracker:
         self.hight=hight
         self.status=None
         self.result=None
+
+    def is_hand_closed(self, hand):
+        tip_y = hand.landmark[12].y
+        base_y = hand.landmark[9].y
+        return tip_y > base_y

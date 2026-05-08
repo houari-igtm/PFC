@@ -18,7 +18,7 @@ class Tracker(Base_Tracker):
 
         if result.multi_hand_landmarks:
             for hand in result.multi_hand_landmarks:
-
+                hand_closed = self.is_hand_closed(hand)
                 h, w, _ = frame.shape
                 lm = hand.landmark
 
@@ -31,19 +31,11 @@ class Tracker(Base_Tracker):
                     palm_points.append([px, py])
                     cv2.circle(frame, (px, py), 8, (255, 0, 255), cv2.FILLED)
 
-                # Detect open hand
-                palm_center = palm_points[2]
-                finger_tip = lm[12]  # middle finger tip
-
-                fx, fy = int(finger_tip.x * w), int(finger_tip.y * h)
-                cv2.circle(frame, (fx, fy), 8, (0, 255, 0), cv2.FILLED)
-
-                distance = ((fx - palm_center[0])**2 + (fy - palm_center[1])**2) ** 0.5
-                hand_open = distance > 40
+                
 
                 obj_h, obj_w, _ = currentobj["img"].shape
 
-                if hand_open:
+                if not hand_closed:
                     for pos in palm_points:
                         if (pos[0] >= position[0] and
                             pos[0] <= position[0] + obj_w and
@@ -51,11 +43,11 @@ class Tracker(Base_Tracker):
                             pos[1] <= position[1] + obj_h):
 
                             if currentobj["is_eatable"]:
-                                self.score += 100
+                                self.score += 1
                             else:
                                 self.score = 0
                                 self.lost = True
-                                
+                            
 
                             position[1] = self.hight + 1
 

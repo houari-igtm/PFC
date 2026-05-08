@@ -112,7 +112,7 @@ class Game(Base):
          else:
              
              
-             x = 365
+             x = self.width // 2 - 150
              y = self.hight - 100
              cv2.putText(frame, "Game Over Press R to Restart", (x, y), cv2.FONT_HERSHEY_SIMPLEX,2, (0, 0, 255), 3)
              cv2.imshow("frame", frame)
