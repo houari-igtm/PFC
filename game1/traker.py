@@ -107,7 +107,7 @@ class Tracker(Base_Tracker):
                     position[1] <= center[1] <= position[1] + obj_h)
 
             if in_box and mouth_open:
-                self.score = self.score + 100 if currentobj["is_eatable"] else 0
+                self.score = self.score + 1 if currentobj["is_eatable"] else 0
                 self.lost = not currentobj["is_eatable"]
                 position[1] = self.hight + 1
                 return self.score, self.lost
