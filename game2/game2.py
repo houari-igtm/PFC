@@ -53,14 +53,15 @@ class Game(Base):
         ra.shuffle(allfood)
         selected_obj=allfood[0:3]
         Name=ra.choice(selected_obj)["name"]
-        # Use proportional spacing (10% of width between objects)
+      
         spacing = int(self.width * 0.10)
-        object_width = int(self.width * 0.15)  # Approximate object width 15% of screen
+
+        object_width = int(self.width * 0.15)  
         total_width = object_width * 3 + spacing * 2
         start_x = int((self.width - total_width) / 2)
         for i in range(3):
           x = start_x + i * (object_width + spacing)
-          y = int(self.hight * 0.4)  # 40% down the screen
+          y = int(self.hight * 0.4)  
           positions.append([x, y])
         return allfood[0:3], positions, Name
           
@@ -93,10 +94,10 @@ class Game(Base):
                     thickness=2,
                     lineType=cv2.LINE_AA)
          
-         # Responsive instruction text position
-         instr_y = int(h * 0.25)
-         instr_x = int(w * 0.25)
-         cv2.putText(frame,text=f"Click : {Name}",org=(instr_x,instr_y),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+         
+         y = int(h * 0.25)
+         x = int(w * 0.25)
+         cv2.putText(frame,text=f"Click : {Name}",org=(x,y),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=2,
           color=(0, 0, 0), 
          thickness=2,

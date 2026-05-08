@@ -22,7 +22,7 @@ class Tracker(Base_Tracker):
                 h, w, _ = frame.shape
                 lm = hand.landmark
 
-                # 4 purple points on palm
+               
                 palm_ids = [0, 5, 9, 13]
                 palm_points = []
 
@@ -85,7 +85,6 @@ class Tracker(Base_Tracker):
             mouth_ratio = (bottom_y - top_y) / mouth_width if mouth_width else 0
             mouth_open = mouth_ratio > 0.20
 
-            # Draw points
             for pt in [(center[0], int(top_y)), (center[0], int(bottom_y)),
                     (int(left_x), center[1]), (int(right_x), center[1])]:
                 cv2.circle(frame, pt, 4, (255, 0, 0), cv2.FILLED)

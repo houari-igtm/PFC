@@ -94,7 +94,7 @@ class Gui:
         )
         self.hand_btn.pack(side=LEFT, padx=15)
 
-        # Quit button container (below Game buttons, centered)
+       
         quit_container = Frame(title_frame, bg="#2C3E50")
         quit_container.pack(pady=(10, 0))
 
