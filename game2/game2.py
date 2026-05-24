@@ -96,7 +96,7 @@ class Game(Base):
          
          
          y = int(h * 0.25)
-         x = int(w * 0.25)
+         x = int(w * 0.30)
          cv2.putText(frame,text=f"Click : {Name}",org=(x,y),fontFace=cv2.FONT_HERSHEY_SIMPLEX,
          fontScale=2,
           color=(0, 0, 0), 
@@ -135,7 +135,7 @@ class Game(Base):
                       color=(0,255,0)
                   else:
                       color=(0,0,255)
-                  cv2.putText(frame,f"{result} - WAIT...",(500, self.hight-100),cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
+                  cv2.putText(frame,f"{result} - WAIT...",(400, self.hight-100),cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
                   if time.time() - self.wait_st > 2:
                       currentobj, positions, Name = self.ChoiseObject()
                       self.waiting = False

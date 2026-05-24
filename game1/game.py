@@ -16,6 +16,7 @@ class Game(Base):
       self.vid.set(4,self.hight)
       self.type="face"
       self.lost=False
+      self.allfood=self.Load_eatable()+self.Load_NoNEatable()
       
   
     def Load_eatable(self):
@@ -42,12 +43,11 @@ class Game(Base):
     
 
     def ChoiseObject(self): 
-        allfood=[]
-        allfood=self.Load_eatable()+self.Load_NoNEatable()
+        
         half=self.width/2
-        # Use proportional offset (20% of width) instead of hardcoded 120
+       
         offset = int(self.width * 0.1)
-        return allfood[ra.randint(0,len(allfood)-1)],[ra.randint(int(half-offset),int(half+offset)),2] 
+        return self.allfood[ra.randint(0,len(self.allfood)-1)],[ra.randint(int(half-offset),int(half+offset)),2] 
         
     def AddToFrame(self,frame,currentobj,position):
          frame = cvzone.overlayPNG(frame, currentobj, position)
@@ -57,9 +57,8 @@ class Game(Base):
          font = cv2.FONT_HERSHEY_SIMPLEX
          
          y_text = int(bar_height *0.60)
-         score_offset = int(w * 0.08)  # 8% of width
-         button_offset = int(w * 0.2)  # 20% of width
-        
+         score_offset = int(w * 0.08)  
+         button_offset = int(w * 0.2)  
          cv2.putText(frame, text=f"Score: {self.score}",
                     org=(int(w/2)-score_offset, y_text),
                     fontFace=font,
@@ -93,8 +92,9 @@ class Game(Base):
          ret ,frame=self.vid.read()
          frame = cv2.flip(frame, 1)
          if self.lost==False:
-          self.AddToFrame(frame,currentobj["img"],position)
+          
           frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+          self.AddToFrame(frame,currentobj["img"],position)
         
 
           if self.type=="hand":
@@ -112,9 +112,14 @@ class Game(Base):
          else:
              
              
-             x = self.width // 2 - 150
-             y = self.hight - 100
-             cv2.putText(frame, "Game Over Press R to Restart", (x, y), cv2.FONT_HERSHEY_SIMPLEX,2, (0, 0, 255), 3)
+             text = "Game Over Press R to Restart"
+             font = cv2.FONT_HERSHEY_SIMPLEX
+             font_scale = 2
+             thickness = 3
+             text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
+             x = (self.width - text_size[0]) // 2
+             y = int(self.hight - (self.hight *0.4))
+             cv2.putText(frame, text, (x, y), font, font_scale, (0, 0, 255), thickness)
              cv2.imshow("frame", frame)
              
          
