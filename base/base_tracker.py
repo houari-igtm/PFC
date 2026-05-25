@@ -5,7 +5,7 @@ class Base_Tracker:
         self.mpDraw=mp.solutions.drawing_utils
         self.drawSpec=self.mpDraw.DrawingSpec(thickness=1, circle_radius=1)
         self.mpHand=mp.solutions.hands
-        self.hands=self.mpHand.Hands()
+        self.hands=self.mpHand.Hands( max_num_hands=1, min_detection_confidence=0.5,min_tracking_confidence=0.3)
         self.score=0
         self.width=width
         self.hight=hight

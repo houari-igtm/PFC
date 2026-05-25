@@ -92,35 +92,34 @@ class Game(Base):
          ret ,frame=self.vid.read()
          frame = cv2.flip(frame, 1)
          if self.lost==False:
-          
-          frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-          self.AddToFrame(frame,currentobj["img"],position)
-        
+                
+                frame_RBG=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+                self.AddToFrame(frame,currentobj["img"],position)
+                
 
-          if self.type=="hand":
-                self.score,self.lost=self.track.TrackHands(currentobj,position,frame,frame_RBG)
-          elif self.type == "face":
-              self.score, self.lost = self.track.TrackFace(currentobj, position, frame, frame_RBG)
-              if  position[1] > self.hight:   
-                  currentobj, position = self.ChoiseObject()
+                if self.type=="hand":
+                        self.score,self.lost=self.track.TrackHands(currentobj,position,frame,frame_RBG)
+                elif self.type == "face":
+                    self.score, self.lost = self.track.TrackFace(currentobj, position, frame, frame_RBG)
+                    
 
-          cv2.imshow("frame",frame)
-          
-          position[1]+=self.speed
-          if position[1]>self.hight:
-            currentobj,position=self.ChoiseObject()
+                cv2.imshow("frame",frame)
+                
+                position[1]+=self.speed
+                if position[1]>self.hight:
+                    currentobj,position=self.ChoiseObject()
          else:
              
-             
-             text = "Game Over Press R to Restart"
-             font = cv2.FONT_HERSHEY_SIMPLEX
-             font_scale = 2
-             thickness = 3
-             text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
-             x = (self.width - text_size[0]) // 2
-             y = int(self.hight - (self.hight *0.4))
-             cv2.putText(frame, text, (x, y), font, font_scale, (0, 0, 255), thickness)
-             cv2.imshow("frame", frame)
+                
+                text = "Game Over Press R to Restart"
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                font_scale = 2
+                thickness = 3
+                text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
+                x = (self.width - text_size[0]) // 2
+                y = int(self.hight - (self.hight *0.4))
+                cv2.putText(frame, text, (x, y), font, font_scale, (0, 0, 255), thickness)
+                cv2.imshow("frame", frame)
              
          
          key = cv2.waitKey(1)
