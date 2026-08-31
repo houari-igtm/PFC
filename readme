@@ -1,6 +1,6 @@
 # 🎮 Camera Eating Game
 
-A desktop game controlled entirely by your **hand and facial movements** — no keyboard needed. Built using real-time computer vision to track gestures through your webcam and turn them into in-game actions.
+A desktop game controlled entirely by your**hand and facial movements* Built using real-time computer vision to track gestures through your webcam and turn them into in-game actions.
 
 ## Tech Stack
 - Python
@@ -15,10 +15,10 @@ A desktop game controlled entirely by your **hand and facial movements** — no 
 - Simple, clean Tkinter menu to switch between games
 
 ## How to Run
-```bash
+
 pip install -r requirements.txt
 python gui.py
-```
+
 
 ## Notes
 Make sure you have good lighting in front of the camera for accurate tracking.
